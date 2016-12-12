@@ -1,0 +1,55 @@
+# TO USE CONFIG FILE: install.package('config')
+#   https://cran.r-project.org/web/packages/config/index.html contains
+#   package downloads if issues installing on MAC
+
+### Start date for tool to run from ###
+default:
+  startDate:
+    Month: "04"		  # MM
+    Day: "03"			  # DD
+    Year: "2016"		# YYYY
+  
+  endDate:
+    Month: "10"		  # MM
+    Day: "02"			  # DD
+    Year: "2016"		# YYYY
+  
+  
+  header: ["Date","Batter Name","Pitcher Name","Batter v Pitcher hand","Batter location","Pitcher v Batter hand","Pitcher location","At bats","Hit"]
+  
+  url:
+    Base:"http://www.hockey-reference.com"
+    
+  teamAbbrs:
+    ANA: "Anaheim Ducks"
+    ARI: "Arizona Coyotes"
+    BOS: "Boston Bruins"
+    BUF: "Buffalo Sabres"
+    CGY: "Calgary Flames"
+    CAR: "Carolina Hurricanes"
+    CHI: "Chicago Blackhawks"
+    COL: "Colorado Avalanche"
+    CBJ: "Columbus Blue Jackets"
+    DAL: "Dallas Stars"
+    DET: "Detroit Red Wings"
+    EDM: "Edmonton Oilers"
+    FLA: "Florida Panthers"
+    LAK: "Los Angeles Kings"
+    MIN: "Minnesota Wild"
+    MTL: "Montreal Canadiens"
+    NSH: "Nashville Predators"
+    NJD: "New Jersey Devils"
+    NYI: "New York Islanders"
+    NYR: "New York Rangers"
+    OTT: "Ottawa Senators"
+    PHI: "Philadelphia Flyers"
+    PIT: "Pittsburgh Penguins"
+    SJS: "San Jose Sharks"
+    STL: "St. Louis Blues"
+    TBL: "Tampa Bay Lightning"
+    TOR: "Toronto Maple Leafs"
+    VAN: "Vancouver Canucks"
+    WSH: "Washington Capitals"
+    WPG: "Winnipeg Jets"
+    
+  

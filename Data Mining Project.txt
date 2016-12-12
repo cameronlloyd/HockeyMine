@@ -1,0 +1,50 @@
+First I will split the 2015-2016 NHL season into two halfs to reduce the amount of data to scrape (since there are 82 games in a regular season) and keep the second half.
+Then I will split the remaining data into something similar to a 66/33 training to testing split, where the training data would be strictly the dates before the data used in the testing data.
+For each game, I will create one record containing the following data:
+	* NOTE: The statistical data used for each record is from all the games within the 2015-2016 season leading up to the current event
+
+	Home Team Name/ID (T1)
+	Away Team Name/ID (T2)
+	For both T1 and T2 on ALL games so far this season:
+		*Last 10 games
+		*Win streak season
+		*Goals For
+		*Goals Against
+			(goal diff will be created from these 2)
+		*Power Play Success % (PPG/PPO)
+		*Penalty Kill Success % (PKG/PKO)
+		Face-off win %
+		Save %
+		5v5 Goals for/against 
+		*Home/Away win %
+		Takeaway/Giveaway Diff.
+	For both T1 and T2 on ALL H2H MATCHUPS so far this season:
+		Fenwick (close) %
+		PDO
+		Goal Differential
+		PP Success %
+		PK Success %
+		FOW %
+		Save %
+		5v5 Goal for/Against
+					
+This would mean each record would contain roughly 38 attributes.  Since this is so high dimensional, I will likely exclude a few attributes that have been proven to be less useful in previous projects.
+
+Then I would perform an exploratory analysis of the attributes
+
+I would then build either all or a few of the following models:
+	- Regression
+	- Bayes
+	- SVM
+	- Random Forest
+	- K-NN		
+
+
+
+So this would be fairly similar to the extra credit assignment (with the exception of creating my own data set) if this is allowed	
+
+
+UPDATE:
+	{GP, Date, Loc, Opp, GF, GA, Outcome, Wins, Losses, ROW, OL, L10Wins, L10Losses, L10OL,
+		Streak, ShotsFor, PIM, PPG, PPO, SHG, ShotsAgainst, PKM, PKG, PKO, TotWinPer 
+		HomeWinPer, AwayWinPer}
