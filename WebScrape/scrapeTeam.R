@@ -52,25 +52,19 @@ getTeamInfo <- function(team) {
   teamSched = read_html(link) #These two lines are not protected
   game.links = html_nodes(teamSched, xpath="//pre/a[starts-with(@href,'/boxes/')]") %>% xml_attr("href")
   
-  
+  gameNo <<- 0
+  L10 <<- c(0,0,0)
+  locPer <<- c(0,0,0,0)
+  runningTot <<- c(0,0,0,0,0,0,0,0,0,0,0,0)
   for (link in game.links) {
-    link = paste("http://www.baseball-reference.com",link,sep="")
-    print("Scraping a game now")
-    print(paste("The link for the game being scraped now is: ",link,sep=""))
-    
-    
     gameFrame = scrapeGame(link,as.numeric(month))
     result = rbind(result,gameFrame)
-    
-    print("Finished scraping game")
+
+    gameNo <<- gameNo + 1
   }
   
-  dateColumn = rep(date,nrow(result))
-  result = data.frame(result,dateColumn)
-  #names(result) = c("avgHandBatter" ,"avgPlaceBatter","avgHandPitcher","avgPlacePitcher","hit","atBats","sampleHandBatter","samplePlaceBatter","sampleHandPitcher","samplePlacePitcher","Date")
-  
+  closeAllConnections()
   return (result)
-  
 }
 
 data = scrapeTeam("MTL")

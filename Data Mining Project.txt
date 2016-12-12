@@ -45,6 +45,9 @@ So this would be fairly similar to the extra credit assignment (with the excepti
 
 
 UPDATE:
-	{GP, Date, Loc, Opp, GF, GA, Outcome, Wins, Losses, ROW, OL, L10Wins, L10Losses, L10OL,
-		Streak, ShotsFor, PIM, PPG, PPO, SHG, ShotsAgainst, PKM, PKG, PKO, TotWinPer 
-		HomeWinPer, AwayWinPer}
+  From Schedule: {GP, Date, Loc, Opp, GF, GA, Outcome, Wins, Losses, ROW, OL, L10Wins,
+			L10Losses, L10OL, Streak, ShotsFor, PIM, PPG, PPO, SHG, ShotsAgainst,
+			PKM, PKG, PKO, TotWinPer, HomeWinPer, AwayWinPer}
+
+
+
