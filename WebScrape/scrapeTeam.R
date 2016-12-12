@@ -3,59 +3,54 @@ library('XML')
 
 config <- config::get()
 
-scrapeTeam <- function(teamAbbr, start, end){
+scrapeTeam <- function(teamAbbr){
+    
+  tryCatch({
+    teamInfo = getTeamInfo(teamAbbr)
+    saveRDS(teamInfo,file=paste("./TeamSchedules/RDA/",teamAbbr," Data.rda",sep=""))
+    write.csv(teamInfo,file=paste("./TeamSchedules/CSV/",teamAbbr,".csv",sep=""))
+  }, error = function(e){
+    cat("ERROR:",conditionMessage(e),"\n")
+  })
   
-  data = data.frame(Date = c(), 
+  return (teamInfo)
+}
+
+# Scrape all hockey games on a given day
+getTeamInfo <- function(team) {
+  
+  result = data.frame(GP = c(),
+                    Date = c(), 
                     Loc = c(),
                     Opp = c(),
                     GF = c(),
                     GA = c(),
                     Outcome = c(),
-                    Streak = c(),
                     Wins = c(),
-                    Loss = c(),
+                    Losses = c(),
+                    ROW = c(),
                     OL = c(),
-                    Shots = c(),
+                    L10Wins = c(),
+                    L10Losses = c(),
+                    L10OL = c(),
+                    Streak = c(),
+                    ShotsFor = c(),
                     PIM = c(),
                     PPG = c(),
-                    PKSuccess = c(),
-                    FOW = c(),
-                    Save = c(),
-                    EvenGoal4_against=c(),
-                    PlaceWinPer = c(),
-                    TakeGiveDiff = c())
-  
-    
-  tryCatch({
-    teamInfo = getTeamInfo(teamAbbr, start, end)
-    data = rbind(data,teamInfo)
-    saveRDS(data,file=paste(as.character(dates[i])," Data.rda",sep=""))
-  }, error = function(e){
-    cat("ERROR:",conditionMessage(e),"\n")
-  })
-  
-  return (data)
-}
-
-# Scrape all hockey games on a given day
-getTeamInfo <- function(team, start, end) {
-  
-  result = data.frame(Date = c(), 
-                     StreakL10 =c(),
-                     StreakTot = c(),
-                     GoalDiff = c(),
-                     PPSuccess = c(),
-                     PKSuccess = c(),
-                     FOW = c(),
-                     Save = c(),
-                     EvenGoal4_against=c(),
-                     PlaceWinPer = c(),
-                     TakeGiveDiff = c())
+                    PPO = c(),
+                    SHG = c(),
+                    ShotsAgainst = c(),
+                    PKM = c(),
+                    PKG = c(),
+                    PKO = c(),
+                    TotWinPer = c(),
+                    HomeWinPer = c(),
+                    AwayWinPer = c())
   
   link = paste("http://www.hockey-reference.com/teams/",team,"/2016_games.html",sep="")
   
-  dayInBaseball = read_html(link) #These two lines are not protected
-  game.links = html_nodes(dayInBaseball, xpath="//pre/a[starts-with(@href,'/boxes/')]") %>% xml_attr("href")
+  teamSched = read_html(link) #These two lines are not protected
+  game.links = html_nodes(teamSched, xpath="//pre/a[starts-with(@href,'/boxes/')]") %>% xml_attr("href")
   
   
   for (link in game.links) {
@@ -78,6 +73,4 @@ getTeamInfo <- function(team, start, end) {
   
 }
 
-startDate = "12/1"
-endDate = "12/1"
-data = scrapeTeam("MTL", startDate, endDate)
+data = scrapeTeam("MTL")
