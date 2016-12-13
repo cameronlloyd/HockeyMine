@@ -49,6 +49,6 @@ UPDATE:
 			L10Losses, L10OL, Streak, ShotsFor, PIM, PPG, PPO, SHG, ShotsAgainst,
 			PKM, PKG, PKO, TotWinPer, HomeWinPer, AwayWinPer}
 
-  From Matchups: {Save %, Goalies played, 
+  From Matchups: {Save %, Avg Goalie count, Avg shift count, ATOI} 
 
 
