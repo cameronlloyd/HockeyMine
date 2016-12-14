@@ -52,6 +52,21 @@ UpdateTeams <- function(){
   })
 }
 
+# Update dataframes for a single team
+UpdateTeam <- function(abbr){
+  
+  tryCatch({
+    ## Create dataframe of matchup info
+    print(paste("Updating: ",abbr,sep=""))
+    teamInfo = UpdateSchedule(abbr)
+    print("   Saving.")
+    saveRDS(teamInfo,file=paste("./TeamSchedules/RDA/",abbr," Data.rda",sep=""))
+    write.csv(teamInfo,file=paste("./TeamSchedules/CSV/",abbr,".csv",sep=""))
+  }, error = function(e){
+    cat("ERROR:",conditionMessage(e),"\n")
+  })
+}
+
 
 
 
@@ -208,8 +223,14 @@ getSkaterStats <- function(html, team){
   return (results)
 }
 
-
-
+# Deletes a column from each team df in workspace.  Assuming that it is there
+DeleteColumn <- function(colName){
+  for (team in names(config$teamAbbrs)){
+    df = get(team)
+    df$colName = NULL
+    assign(team, df, envir=.GlobalEnv)
+  }
+}
 
 # Converts int totals of minutes and second to a string notation averaged by count
 convertATOI <- function(m,s,count){
@@ -223,12 +244,22 @@ convertATOI <- function(m,s,count){
   return (atoi)
 }
 
+# Writes team df to both CSV and RDA files
+Write2Files <- function(team, df){
+  saveRDS(df,file=paste("./TeamSchedules/RDA/",team," Data.rda",sep=""))
+  write.csv(df,file=paste("./TeamSchedules/CSV/",team,".csv",sep=""))
+}
+
 
 #importTeams()
 #UpdateTeams()
 
-team = "WSH"
+#team = "OTT"
 #importTeam(team)
-data = UpdateSchedule(team)
-saveRDS(data,file=paste("./TeamSchedules/RDA/",team," Data.rda",sep=""))
-write.csv(data,file=paste("./TeamSchedules/CSV/",team,".csv",sep=""))
+#UpdateTeam(team)
+
+
+for (team in names(config$teamAbbrs)){
+  df = get(team)
+  Write2Files(team, df)
+}
