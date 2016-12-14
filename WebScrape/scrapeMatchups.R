@@ -30,24 +30,33 @@ importTeam <- function(teamAbbr){
 }
 
 
+
+
+
 # Update dataframes for each matchup between two teams.  This information will be
-#   more descriptive of standard schedule information (Will incl. advanced statistics)
+#   more descriptive of standard schedule information
 UpdateTeams <- function(){
   
   tryCatch({
     ## For each team, create dataframe of matchup info
-    team.Abbrs = config$StandardAbbrs
+    team.Abbrs = config$teamAbbrs
     for (abbr in names(team.Abbrs)){
-      matchups = UpdateAllMatchups(abbr)
+      print(paste("Updating: ",abbr,sep=""))
+      teamInfo = UpdateSchedule(abbr)
+      print("   Saving.")
+      saveRDS(teamInfo,file=paste("./TeamSchedules/RDA/",abbr," Data.rda",sep=""))
+      write.csv(teamInfo,file=paste("./TeamSchedules/CSV/",abbr,".csv",sep=""))
     } 
-    
   }, error = function(e){
     cat("ERROR:",conditionMessage(e),"\n")
   })
 }
 
-# Update all matchups for current team with additional statistics.
-UpdateAllMatchups <- function(teamAbbr){
+
+
+
+# Update schedule for current team with additional statistics.
+UpdateSchedule <- function(teamAbbr){
   # Add new features to dataframe
   df = get(eval(teamAbbr))
   df$SVPercentage = NA
@@ -59,7 +68,7 @@ UpdateAllMatchups <- function(teamAbbr){
   tryCatch({
     dates = as.Date(df$Date)
     count = 1
-    runningTot = c(0,0,0,0,0,0,0,0,0,0)
+    runningTot = c(0,0,0,0,0)
     for (i in 1:length(dates)) {
       # Get current event
       event = df[i,]
@@ -82,39 +91,27 @@ UpdateAllMatchups <- function(teamAbbr){
       id = paste(year,month,day,"0",homeTeam,sep="")
       
       ## Update matchup record
-      #result = UpdateMatchup(id, homeTeam, awayTeam)
       result = UpdateMatchup(id, teamAbbr, event$Opponent)
       
       ## Increment results
-      runningTot[1] = runningTot[1] + as.numeric(result[1])   #HomeAvgShiftCnt
-      #runningTot[2] = runningTot[2] + as.numeric(result[3])   #AwayAvgShiftCnt
-      runningTot[3] = runningTot[3] + as.numeric(result[5])   #HomeSVPer
-      runningTot[4] = runningTot[4] + as.numeric(result[6])   #HomeAvgGoalieCnt
-      #runningTot[5] = runningTot[5] + as.numeric(result[7])   #AwaySVPer
-      #runningTot[6] = runningTot[6] + as.numeric(result[8])   #AwayAvgGoalieCnt
-      HomeAvgShiftCnt = round((runningTot[1]/count), digit=2)
-      #AwayAvgShiftCnt = round((runningTot[2]/count), digit=2)
-      HomeSvPer = round((runningTot[3]/count), digit=2)
-      HomeAvgGoalieCnt = round((runningTot[4]/count), digit=2)
-      #AwaySVPer = round((runningTot[5]/count), digit=2)
-      #AwayAvgGoalieCnt = round((runningTot[6]/count), digit=2)
-      
-      # HomeATOI
+      runningTot[1] = runningTot[1] + as.numeric(result[1])   #AvgShiftCnt
+      runningTot[2] = runningTot[2] + as.numeric(result[5])   #SVPer
+      runningTot[3] = runningTot[3] + as.numeric(result[6])   #AvgGoalieCnt
+      AvgShiftCnt = round((runningTot[1]/count), digit=2)
+      SvPer = round((runningTot[2]/count), digit=2)
+      AvgGoalieCnt = round((runningTot[3]/count), digit=2)
+
+      # ATOI
       atoi = strsplit(as.character(result[2]),"[.]")
-      runningTot[7] = runningTot[7] + as.numeric(unlist(atoi)[1])
-      runningTot[8] = runningTot[8] + as.numeric(unlist(atoi)[2])
-      HomeATOI = convertATOI(runningTot[7], runningTot[8], count)
+      runningTot[4] = runningTot[4] + as.numeric(unlist(atoi)[1])
+      runningTot[5] = runningTot[5] + as.numeric(unlist(atoi)[2])
+      ATOI = convertATOI(runningTot[4], runningTot[5], count)
       
-      # AwayATOI
-      #atoi = strsplit(as.character(result[2]),"[.]")
-      #runningTot[9] = runningTot[9] + as.numeric(unlist(atoi)[1])
-      #runningTot[10] = runningTot[10] + as.numeric(unlist(atoi)[2])
-      #AwayATOI = convertATOI(runningTot[9], runningTot[10], count)
-      
-      df[count,'SVPercentage'] = HomeSvPer
-      df[count,'AvgGoalieCount'] = HomeAvgGoalieCnt
-      df[count,'AvgShiftCount'] = HomeAvgShiftCnt
-      df[count,'ATOI'] = HomeATOI
+      df[count,'SVPercentage'] = SvPer
+      df[count,'AvgGoalieCount'] = AvgGoalieCnt
+      df[count,'AvgShiftCount'] = AvgShiftCnt
+      df[count,'ATOI'] = ATOI
+      df[count,'GID'] = id
       
       count = count + 1
     }
@@ -124,6 +121,9 @@ UpdateAllMatchups <- function(teamAbbr){
   
   return (df)
 }
+
+
+
 
 # Update a single matchup with individual skater stats
 UpdateMatchup <- function(id, homeTeam, awayTeam){
@@ -157,6 +157,9 @@ UpdateMatchup <- function(id, homeTeam, awayTeam){
 
   return (result)
 }
+
+
+
 
 # Retrieve avg save percentage of goalies and the amount of goalies played using matchup page
 getGoalieStats <- function(html, team){
@@ -205,6 +208,9 @@ getSkaterStats <- function(html, team){
   return (results)
 }
 
+
+
+
 # Converts int totals of minutes and second to a string notation averaged by count
 convertATOI <- function(m,s,count){
   m = m / count
@@ -217,6 +223,12 @@ convertATOI <- function(m,s,count){
   return (atoi)
 }
 
+
 #importTeams()
-importTeam("MTL")
-data = UpdateAllMatchups("MTL")
+#UpdateTeams()
+
+team = "WSH"
+#importTeam(team)
+data = UpdateSchedule(team)
+saveRDS(data,file=paste("./TeamSchedules/RDA/",team," Data.rda",sep=""))
+write.csv(data,file=paste("./TeamSchedules/CSV/",team,".csv",sep=""))
