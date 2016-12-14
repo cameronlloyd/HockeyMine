@@ -42,7 +42,7 @@ UpdateTeams <- function(){
     team.Abbrs = config$teamAbbrs
     for (abbr in names(team.Abbrs)){
       print(paste("Updating: ",abbr,sep=""))
-      teamInfo = UpdateSchedule(abbr)
+      teamInfo = UpdateSchedule(abbr, "2016")
       print("   Saving.")
       saveRDS(teamInfo,file=paste("./TeamSchedules/RDA/",abbr," Data.rda",sep=""))
       write.csv(teamInfo,file=paste("./TeamSchedules/CSV/",abbr,".csv",sep=""))
@@ -58,32 +58,44 @@ UpdateTeam <- function(abbr){
   tryCatch({
     ## Create dataframe of matchup info
     print(paste("Updating: ",abbr,sep=""))
-    teamInfo = UpdateSchedule(abbr)
+    teamInfo = UpdateSchedule(abbr, "2016")
     print("   Saving.")
-    saveRDS(teamInfo,file=paste("./TeamSchedules/RDA/",abbr," Data.rda",sep=""))
-    write.csv(teamInfo,file=paste("./TeamSchedules/CSV/",abbr,".csv",sep=""))
+    #saveRDS(teamInfo,file=paste("./TeamSchedules/RDA/",abbr," Data.rda",sep=""))
+    #write.csv(teamInfo,file=paste("./TeamSchedules/CSV/",abbr,".csv",sep=""))
   }, error = function(e){
     cat("ERROR:",conditionMessage(e),"\n")
   })
+  
+  return (teamInfo)
 }
 
 
 
 
 # Update schedule for current team with additional statistics.
-UpdateSchedule <- function(teamAbbr){
+UpdateSchedule <- function(teamAbbr, year){
   # Add new features to dataframe
   df = get(eval(teamAbbr))
+  df$AvgCFPerClose = NA
+  df$AvgCFPer5v5 = NA
+  df$AvgCFPerEven = NA
   df$SVPercentage = NA
   df$AvgGoalieCount = NA
   df$AvgShiftCount = NA
   df$ATOI = NA
+  df$AvgAge = NA
+  df$PDO = NA
+  df$FOWPer = NA
   
   # Scrape event for each game at given date against given opponent
   tryCatch({
+    # These stats will be the same for every record
+    fullTeam = AddFullTeamStats(teamAbbr, year)
+    
+    # Get matchup stats
     dates = as.Date(df$Date)
     count = 1
-    runningTot = c(0,0,0,0,0)
+    runningTot = c(0,0,0,0,0,0,0,0)
     for (i in 1:length(dates)) {
       # Get current event
       event = df[i,]
@@ -106,27 +118,40 @@ UpdateSchedule <- function(teamAbbr){
       id = paste(year,month,day,"0",homeTeam,sep="")
       
       ## Update matchup record
-      result = UpdateMatchup(id, teamAbbr, event$Opponent)
+      result = UpdateMatchup(id, teamAbbr)
       
       ## Increment results
-      runningTot[1] = runningTot[1] + as.numeric(result[1])   #AvgShiftCnt
-      runningTot[2] = runningTot[2] + as.numeric(result[5])   #SVPer
-      runningTot[3] = runningTot[3] + as.numeric(result[6])   #AvgGoalieCnt
-      AvgShiftCnt = round((runningTot[1]/count), digit=2)
-      SvPer = round((runningTot[2]/count), digit=2)
-      AvgGoalieCnt = round((runningTot[3]/count), digit=2)
-
+      runningTot[1] = runningTot[1] + as.numeric(result[1])   #AvgCFPerClose
+      runningTot[2] = runningTot[2] + as.numeric(result[2])   #AvgCFPer5v5
+      runningTot[3] = runningTot[3] + as.numeric(result[3])   #AvgCFPerEven
+      runningTot[4] = runningTot[4] + as.numeric(result[4])   #AvgShiftCnt
+      runningTot[5] = runningTot[5] + as.numeric(result[6])   #SVPer
+      runningTot[6] = runningTot[6] + as.numeric(result[7])   #AvgGoalieCnt
+      AvgCFPerClose = round((runningTot[1]/count), digit=2)
+      AvgCFPer5v5 = round((runningTot[2]/count), digit=2)
+      AvgCFPerEven = round((runningTot[3]/count), digit=2)
+      AvgShiftCnt = round((runningTot[4]/count), digit=2)
+      SvPer = round((runningTot[5]/count), digit=2)
+      AvgGoalieCnt = round((runningTot[6]/count), digit=2)
+  
       # ATOI
-      atoi = strsplit(as.character(result[2]),"[.]")
-      runningTot[4] = runningTot[4] + as.numeric(unlist(atoi)[1])
-      runningTot[5] = runningTot[5] + as.numeric(unlist(atoi)[2])
-      ATOI = convertATOI(runningTot[4], runningTot[5], count)
+      atoi = strsplit(as.character(result[5]),"[.]")
+      runningTot[7] = runningTot[7] + as.numeric(unlist(atoi)[1])
+      runningTot[8] = runningTot[8] + as.numeric(unlist(atoi)[2])
+      ATOI = convertATOI(runningTot[7], runningTot[8], count)
       
+      # Add values to dataframe
+      df[count,'AvgCFPerClose'] = AvgCFPerClose
+      df[count,'AvgCFPer5v5'] = AvgCFPer5v5
+      df[count,'AvgCFPerEven'] = AvgCFPerEven
       df[count,'SVPercentage'] = SvPer
       df[count,'AvgGoalieCount'] = AvgGoalieCnt
       df[count,'AvgShiftCount'] = AvgShiftCnt
       df[count,'ATOI'] = ATOI
       df[count,'GID'] = id
+      df[count,'AvgAge'] = fullTeam$AvAge
+      df[count,'PDO'] = fullTeam$PDO
+      df[count,'FOWPer'] = fullTeam$FOPer
       
       count = count + 1
     }
@@ -137,8 +162,29 @@ UpdateSchedule <- function(teamAbbr){
   return (df)
 }
 
-
-
+# Update each matchup with team stats found from team homepage
+AddFullTeamStats <- function(team, year){
+  # Get HTML from page
+  link = paste("http://www.hockey-reference.com/teams/",team,"/",year,".html",sep="")
+  gameInfo = read_html(link)
+  
+  # Get team stats table
+  teamStats = gameInfo %>% html_nodes(xpath="//table[@id='team_stats']/tbody/tr[1]")
+  
+  # Get AvAge, PDO
+  AvAge = teamStats %>% html_nodes(xpath="./td[1]") %>% html_text()
+  PDO = teamStats %>% html_nodes(xpath="./td[25]") %>% html_text()
+  
+  # Get FOW %
+  skaters = gameInfo %>% html_nodes(xpath="//table[@id='skaters']/tfoot/tr")
+  FOPer = skaters %>% html_nodes(xpath="./td[28]") %>% html_text()
+  
+  # Close web connection
+  closeAllConnections()
+  
+  results = list("AvAge"=AvAge, "PDO"=PDO, "FOPer"=FOPer)
+  return (results)
+}
 
 # Update a single matchup with individual skater stats
 UpdateMatchup <- function(id, homeTeam, awayTeam){
@@ -149,23 +195,20 @@ UpdateMatchup <- function(id, homeTeam, awayTeam){
   
   # Get goalie info
   homeGoalie = getGoalieStats(gameInfo, homeTeam)
-  awayGoalie = getGoalieStats(gameInfo, awayTeam)
   
   # Get Skater info
   homeSkater = getSkaterStats(gameInfo, homeTeam)
-  awaySkater = getSkaterStats(gameInfo, awayTeam)
   
   # Add stats to data frame
-  HomeAvgShiftCnt = homeSkater$avgShift
-  HomeATOI = homeSkater$atoi
-  AwayAvgShiftCnt = awaySkater$avgShift
-  AwayATOI = awaySkater$atoi
-  HomeSVPer = homeGoalie$svPer
-  HomeGoalieCnt = homeGoalie$count
-  AwaySVPer = awayGoalie$svPer
-  AwayGoalieCnt = awayGoalie$count
-  result = cbind(HomeAvgShiftCnt, HomeATOI, AwayAvgShiftCnt, AwayATOI, 
-                 HomeSVPer, HomeGoalieCnt, AwaySVPer, AwayGoalieCnt)
+  AvgCFPerClose = homeSkater$AvgCFPerClose
+  AvgCFPer5v5 = homeSkater$AvgCFPer5v5
+  AvgCFPerEven = homeSkater$AvgCFPerEven
+  AvgShiftCnt = homeSkater$avgShift
+  ATOI = homeSkater$atoi
+  SVPer = homeGoalie$svPer
+  GoalieCnt = homeGoalie$count
+  result = cbind(AvgCFPerClose, AvgCFPer5v5, AvgCFPerEven,
+                 AvgShiftCnt, ATOI, SVPer, GoalieCnt)
   
   # Close web connection
   closeAllConnections()
@@ -219,16 +262,33 @@ getSkaterStats <- function(html, team){
   # Update ATOI
   atoi = convertATOI(atoi_m, atoi_s, count)
   
-  results = list("avgShift"=avgShift, "atoi"=atoi, "count"=count)
+  # Get Corsi-For (Close), (5v5) and (even)
+  skatersAdv = html_nodes(html, xpath=paste("//div[@id='all_",team,"_adv']",sep="")) %>%
+    html_nodes(xpath='comment()') %>%
+    html_text() %>%
+    read_html() %>%
+    html_node('table') %>%
+    html_node('tfoot')
+  AvgCFPerClose = as.numeric(skatersAdv %>% html_nodes(xpath="./tr[@class='CLAll hidden']/td[4]") %>% html_text())
+  AvgCFPer5v5 = as.numeric(skatersAdv %>% html_nodes(xpath="./tr[@class='ALL5v5 hidden']/td[4]") %>% html_text())
+  AvgCFPerEven = as.numeric(skatersAdv %>% html_nodes(xpath="./tr[@class='ALLEV hidden']/td[4]") %>% html_text())
+  
+  results = list("avgShift"=avgShift, "atoi"=atoi, "count"=count, "AvgCFPerClose"=AvgCFPerClose, 
+                 "AvgCFPer5v5"=AvgCFPer5v5, "AvgCFPerEven"=AvgCFPerEven)
   return (results)
 }
 
+
+
+
 # Deletes a column from each team df in workspace.  Assuming that it is there
-DeleteColumn <- function(colName){
+# NOTE: Need to hard code column to delete in function
+DeleteColumn <- function(){
   for (team in names(config$teamAbbrs)){
     df = get(team)
-    df$colName = NULL
+    df$X.1 = NULL
     assign(team, df, envir=.GlobalEnv)
+    Write2Files(team, df)
   }
 }
 
@@ -254,12 +314,9 @@ Write2Files <- function(team, df){
 #importTeams()
 #UpdateTeams()
 
-#team = "OTT"
+team = "MTL"
 #importTeam(team)
-#UpdateTeam(team)
+data = UpdateTeam(team)
 
 
-for (team in names(config$teamAbbrs)){
-  df = get(team)
-  Write2Files(team, df)
-}
+#DeleteColumn()
