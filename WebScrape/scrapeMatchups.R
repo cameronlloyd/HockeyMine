@@ -289,6 +289,7 @@ DeleteColumn <- function(){
   for (team in names(config$teamAbbrs)){
     df = get(team)
     df$X.1 = NULL
+    df$X.2 = NULL
     assign(team, df, envir=.GlobalEnv)
     Write2Files(team, df)
   }
@@ -314,11 +315,5 @@ Write2Files <- function(team, df){
 
 
 importTeams()
-data = UpdateTeams()
-
-#team = "MTL"
-#importTeam(team)
-#data = UpdateTeam(team)
-
-
-#DeleteColumn()
+#data = UpdateTeams()
+DeleteColumn()
