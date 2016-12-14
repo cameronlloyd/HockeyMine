@@ -50,6 +50,8 @@ UpdateTeams <- function(){
   }, error = function(e){
     cat("ERROR:",conditionMessage(e),"\n")
   })
+  
+  return (teamInfo)
 }
 
 # Update dataframes for a single team
@@ -60,8 +62,8 @@ UpdateTeam <- function(abbr){
     print(paste("Updating: ",abbr,sep=""))
     teamInfo = UpdateSchedule(abbr, "2016")
     print("   Saving.")
-    #saveRDS(teamInfo,file=paste("./TeamSchedules/RDA/",abbr," Data.rda",sep=""))
-    #write.csv(teamInfo,file=paste("./TeamSchedules/CSV/",abbr,".csv",sep=""))
+    saveRDS(teamInfo,file=paste("./TeamSchedules/RDA/",abbr," Data.rda",sep=""))
+    write.csv(teamInfo,file=paste("./TeamSchedules/CSV/",abbr,".csv",sep=""))
   }, error = function(e){
     cat("ERROR:",conditionMessage(e),"\n")
   })
@@ -311,12 +313,12 @@ Write2Files <- function(team, df){
 }
 
 
-#importTeams()
-#UpdateTeams()
+importTeams()
+data = UpdateTeams()
 
-team = "MTL"
+#team = "MTL"
 #importTeam(team)
-data = UpdateTeam(team)
+#data = UpdateTeam(team)
 
 
 #DeleteColumn()
