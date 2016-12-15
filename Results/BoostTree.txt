@@ -1,0 +1,866 @@
+> source('~/Documents/HockeyMine/ModelBuild/ModelBuild.R')
+[1] "The interaction depth is: 1"
+[1] "The number of trees is: 300"
+          true
+prediction  0  1
+         0 23  7
+         1  0 56
+          true
+prediction  0  1
+         0 39  8
+         1  0 39
+          true
+prediction  0  1
+         0 29 15
+         1  0 41
+          true
+prediction  0  1
+         0 18 14
+         1  0 54
+          true
+prediction  0  1
+         0 32  9
+         1  0 44
+          true
+prediction  0  1
+         0 27 10
+         1  0 48
+          true
+prediction  0  1
+         0 34 10
+         1  0 42
+[1] 1
+[1] "The interaction depth is: 2"
+[1] "The number of trees is: 300"
+          true
+prediction  0  1
+         0 22  6
+         1  1 57
+          true
+prediction  0  1
+         0 38  6
+         1  1 41
+          true
+prediction  0  1
+         0 28 12
+         1  1 44
+          true
+prediction  0  1
+         0 17 12
+         1  1 56
+          true
+prediction  0  1
+         0 31  8
+         1  1 45
+          true
+prediction  0  1
+         0 25  7
+         1  2 51
+          true
+prediction  0  1
+         0 32  9
+         1  2 43
+[1] 0.9736091
+[1] "The interaction depth is: 4"
+[1] "The number of trees is: 300"
+          true
+prediction  0  1
+         0 21  5
+         1  2 58
+          true
+prediction  0  1
+         0 36  6
+         1  3 41
+          true
+prediction  0  1
+         0 28 13
+         1  1 43
+          true
+prediction  0  1
+         0 16 12
+         1  2 56
+          true
+prediction  0  1
+         0 32  8
+         1  0 45
+          true
+prediction  0  1
+         0 24  7
+         1  3 51
+          true
+prediction  0  1
+         0 31  9
+         1  3 43
+[1] 0.9600717
+[1] "The interaction depth is: 6"
+[1] "The number of trees is: 300"
+          true
+prediction  0  1
+         0 22  6
+         1  1 57
+          true
+prediction  0  1
+         0 36  6
+         1  3 41
+          true
+prediction  0  1
+         0 27 13
+         1  2 43
+          true
+prediction  0  1
+         0 16 12
+         1  2 56
+          true
+prediction  0  1
+         0 32  7
+         1  0 46
+          true
+prediction  0  1
+         0 23  7
+         1  4 51
+          true
+prediction  0  1
+         0 29  9
+         1  5 43
+[1] 0.9512508
+[1] "The interaction depth is: 1"
+[1] "The number of trees is: 500"
+          true
+prediction  0  1
+         0 22  6
+         1  1 57
+          true
+prediction  0  1
+         0 38  6
+         1  1 41
+          true
+prediction  0  1
+         0 29 14
+         1  0 42
+          true
+prediction  0  1
+         0 18 14
+         1  0 54
+          true
+prediction  0  1
+         0 31  8
+         1  1 45
+          true
+prediction  0  1
+         0 27  8
+         1  0 50
+          true
+prediction  0  1
+         0 34  9
+         1  0 43
+[1] 0.99103
+[1] "The interaction depth is: 2"
+[1] "The number of trees is: 500"
+          true
+prediction  0  1
+         0 21  6
+         1  2 57
+          true
+prediction  0  1
+         0 36  6
+         1  3 41
+          true
+prediction  0  1
+         0 27 12
+         1  2 44
+          true
+prediction  0  1
+         0 17 12
+         1  1 56
+          true
+prediction  0  1
+         0 31  8
+         1  1 45
+          true
+prediction  0  1
+         0 24  7
+         1  3 51
+          true
+prediction  0  1
+         0 31  9
+         1  3 43
+[1] 0.9563408
+[1] "The interaction depth is: 4"
+[1] "The number of trees is: 500"
+          true
+prediction  0  1
+         0 21  6
+         1  2 57
+          true
+prediction  0  1
+         0 35  6
+         1  4 41
+          true
+prediction  0  1
+         0 27 13
+         1  2 43
+          true
+prediction  0  1
+         0 16 11
+         1  2 57
+          true
+prediction  0  1
+         0 31  8
+         1  1 45
+          true
+prediction  0  1
+         0 22  7
+         1  5 51
+          true
+prediction  0  1
+         0 30  9
+         1  4 43
+[1] 0.9432484
+[1] "The interaction depth is: 6"
+[1] "The number of trees is: 500"
+          true
+prediction  0  1
+         0 21  5
+         1  2 58
+          true
+prediction  0  1
+         0 35  6
+         1  4 41
+          true
+prediction  0  1
+         0 27 12
+         1  2 44
+          true
+prediction  0  1
+         0 16  9
+         1  2 59
+          true
+prediction  0  1
+         0 32  7
+         1  0 46
+          true
+prediction  0  1
+         0 23  7
+         1  4 51
+          true
+prediction  0  1
+         0 31  9
+         1  3 43
+[1] 0.9519383
+[1] "The interaction depth is: 1"
+[1] "The number of trees is: 700"
+          true
+prediction  0  1
+         0 22  6
+         1  1 57
+          true
+prediction  0  1
+         0 37  6
+         1  2 41
+          true
+prediction  0  1
+         0 26 12
+         1  3 44
+          true
+prediction  0  1
+         0 17 13
+         1  1 55
+          true
+prediction  0  1
+         0 31  8
+         1  1 45
+          true
+prediction  0  1
+         0 24  7
+         1  3 51
+          true
+prediction  0  1
+         0 34  9
+         1  0 43
+[1] 0.9681808
+[1] "The interaction depth is: 2"
+[1] "The number of trees is: 700"
+          true
+prediction  0  1
+         0 21  6
+         1  2 57
+          true
+prediction  0  1
+         0 35  6
+         1  4 41
+          true
+prediction  0  1
+         0 26 10
+         1  3 46
+          true
+prediction  0  1
+         0 16 11
+         1  2 57
+          true
+prediction  0  1
+         0 31  8
+         1  1 45
+          true
+prediction  0  1
+         0 23  7
+         1  4 51
+          true
+prediction  0  1
+         0 30  9
+         1  4 43
+[1] 0.9432167
+[1] "The interaction depth is: 4"
+[1] "The number of trees is: 700"
+          true
+prediction  0  1
+         0 21  6
+         1  2 57
+          true
+prediction  0  1
+         0 35  6
+         1  4 41
+          true
+prediction  0  1
+         0 27 10
+         1  2 46
+          true
+prediction  0  1
+         0 16  9
+         1  2 59
+          true
+prediction  0  1
+         0 30  8
+         1  2 45
+          true
+prediction  0  1
+         0 22  6
+         1  5 52
+          true
+prediction  0  1
+         0 30  9
+         1  4 43
+[1] 0.9410543
+[1] "The interaction depth is: 6"
+[1] "The number of trees is: 700"
+          true
+prediction  0  1
+         0 22  5
+         1  1 58
+          true
+prediction  0  1
+         0 35  6
+         1  4 41
+          true
+prediction  0  1
+         0 26 11
+         1  3 45
+          true
+prediction  0  1
+         0 15  9
+         1  3 59
+          true
+prediction  0  1
+         0 32  8
+         1  0 45
+          true
+prediction  0  1
+         0 22  7
+         1  5 51
+
+> debugSource('~/Documents/HockeyMine/ModelBuild/ModelBuild.R')
+[1] "The interaction depth is: 1"
+[1] "The number of trees is: 300"
+          true
+prediction  0  1
+         0 23  7
+         1  0 56
+          true
+prediction  0  1
+         0 39  8
+         1  0 39
+          true
+prediction  0  1
+         0 29 15
+         1  0 41
+          true
+prediction  0  1
+         0 18 14
+         1  0 54
+          true
+prediction  0  1
+         0 32  9
+         1  0 44
+          true
+prediction  0  1
+         0 27 10
+         1  0 48
+          true
+prediction  0  1
+         0 34 10
+         1  0 42
+[1] 1
+[1] "The interaction depth is: 2"
+[1] "The number of trees is: 300"
+          true
+prediction  0  1
+         0 22  6
+         1  1 57
+          true
+prediction  0  1
+         0 38  6
+         1  1 41
+          true
+prediction  0  1
+         0 28 12
+         1  1 44
+          true
+prediction  0  1
+         0 17 12
+         1  1 56
+          true
+prediction  0  1
+         0 31  8
+         1  1 45
+          true
+prediction  0  1
+         0 25  7
+         1  2 51
+          true
+prediction  0  1
+         0 32  9
+         1  2 43
+[1] 0.9736091
+[1] "The interaction depth is: 4"
+[1] "The number of trees is: 300"
+          true
+prediction  0  1
+         0 21  5
+         1  2 58
+          true
+prediction  0  1
+         0 36  6
+         1  3 41
+          true
+prediction  0  1
+         0 28 13
+         1  1 43
+          true
+prediction  0  1
+         0 16 12
+         1  2 56
+          true
+prediction  0  1
+         0 32  8
+         1  0 45
+          true
+prediction  0  1
+         0 24  7
+         1  3 51
+          true
+prediction  0  1
+         0 31  9
+         1  3 43
+[1] 0.9600717
+[1] "The interaction depth is: 6"
+[1] "The number of trees is: 300"
+          true
+prediction  0  1
+         0 22  6
+         1  1 57
+          true
+prediction  0  1
+         0 36  6
+         1  3 41
+          true
+prediction  0  1
+         0 27 13
+         1  2 43
+          true
+prediction  0  1
+         0 16 12
+         1  2 56
+          true
+prediction  0  1
+         0 32  7
+         1  0 46
+          true
+prediction  0  1
+         0 23  7
+         1  4 51
+          true
+prediction  0  1
+         0 29  9
+         1  5 43
+[1] 0.9512508
+[1] "The interaction depth is: 1"
+[1] "The number of trees is: 500"
+          true
+prediction  0  1
+         0 22  6
+         1  1 57
+          true
+prediction  0  1
+         0 38  6
+         1  1 41
+          true
+prediction  0  1
+         0 29 14
+         1  0 42
+          true
+prediction  0  1
+         0 18 14
+         1  0 54
+          true
+prediction  0  1
+         0 31  8
+         1  1 45
+          true
+prediction  0  1
+         0 27  8
+         1  0 50
+          true
+prediction  0  1
+         0 34  9
+         1  0 43
+[1] 0.99103
+[1] "The interaction depth is: 2"
+[1] "The number of trees is: 500"
+          true
+prediction  0  1
+         0 21  6
+         1  2 57
+          true
+prediction  0  1
+         0 36  6
+         1  3 41
+          true
+prediction  0  1
+         0 27 12
+         1  2 44
+          true
+prediction  0  1
+         0 17 12
+         1  1 56
+          true
+prediction  0  1
+         0 31  8
+         1  1 45
+          true
+prediction  0  1
+         0 24  7
+         1  3 51
+          true
+prediction  0  1
+         0 31  9
+         1  3 43
+[1] 0.9563408
+[1] "The interaction depth is: 4"
+[1] "The number of trees is: 500"
+          true
+prediction  0  1
+         0 21  6
+         1  2 57
+          true
+prediction  0  1
+         0 35  6
+         1  4 41
+          true
+prediction  0  1
+         0 27 13
+         1  2 43
+          true
+prediction  0  1
+         0 16 11
+         1  2 57
+          true
+prediction  0  1
+         0 31  8
+         1  1 45
+          true
+prediction  0  1
+         0 22  7
+         1  5 51
+          true
+prediction  0  1
+         0 30  9
+         1  4 43
+[1] 0.9432484
+[1] "The interaction depth is: 6"
+[1] "The number of trees is: 500"
+          true
+prediction  0  1
+         0 21  5
+         1  2 58
+          true
+prediction  0  1
+         0 35  6
+         1  4 41
+          true
+prediction  0  1
+         0 27 12
+         1  2 44
+          true
+prediction  0  1
+         0 16  9
+         1  2 59
+          true
+prediction  0  1
+         0 32  7
+         1  0 46
+          true
+prediction  0  1
+         0 23  7
+         1  4 51
+          true
+prediction  0  1
+         0 31  9
+         1  3 43
+[1] 0.9519383
+[1] "The interaction depth is: 1"
+[1] "The number of trees is: 700"
+          true
+prediction  0  1
+         0 22  6
+         1  1 57
+          true
+prediction  0  1
+         0 37  6
+         1  2 41
+          true
+prediction  0  1
+         0 26 12
+         1  3 44
+          true
+prediction  0  1
+         0 17 13
+         1  1 55
+          true
+prediction  0  1
+         0 31  8
+         1  1 45
+          true
+prediction  0  1
+         0 24  7
+         1  3 51
+          true
+prediction  0  1
+         0 34  9
+         1  0 43
+[1] 0.9681808
+[1] "The interaction depth is: 2"
+[1] "The number of trees is: 700"
+          true
+prediction  0  1
+         0 21  6
+         1  2 57
+          true
+prediction  0  1
+         0 35  6
+         1  4 41
+          true
+prediction  0  1
+         0 26 10
+         1  3 46
+          true
+prediction  0  1
+         0 16 11
+         1  2 57
+          true
+prediction  0  1
+         0 31  8
+         1  1 45
+          true
+prediction  0  1
+         0 23  7
+         1  4 51
+          true
+prediction  0  1
+         0 30  9
+         1  4 43
+[1] 0.9432167
+[1] "The interaction depth is: 4"
+[1] "The number of trees is: 700"
+          true
+prediction  0  1
+         0 21  6
+         1  2 57
+          true
+prediction  0  1
+         0 35  6
+         1  4 41
+          true
+prediction  0  1
+         0 27 10
+         1  2 46
+          true
+prediction  0  1
+         0 16  9
+         1  2 59
+          true
+prediction  0  1
+         0 30  8
+         1  2 45
+          true
+prediction  0  1
+         0 22  6
+         1  5 52
+          true
+prediction  0  1
+         0 30  9
+         1  4 43
+[1] 0.9410543
+[1] "The interaction depth is: 6"
+[1] "The number of trees is: 700"
+          true
+prediction  0  1
+         0 22  5
+         1  1 58
+          true
+prediction  0  1
+         0 35  6
+         1  4 41
+          true
+prediction  0  1
+         0 26 11
+         1  3 45
+          true
+prediction  0  1
+         0 15  9
+         1  3 59
+          true
+prediction  0  1
+         0 32  8
+         1  0 45
+          true
+prediction  0  1
+         0 22  7
+         1  5 51
+          true
+prediction  0  1
+         0 30  9
+         1  4 43
+[1] 0.9441261
+[1] "The interaction depth is: 1"
+[1] "The number of trees is: 900"
+          true
+prediction  0  1
+         0 22  6
+         1  1 57
+          true
+prediction  0  1
+         0 36  6
+         1  3 41
+          true
+prediction  0  1
+         0 27 12
+         1  2 44
+          true
+prediction  0  1
+         0 17 11
+         1  1 57
+          true
+prediction  0  1
+         0 31  8
+         1  1 45
+          true
+prediction  0  1
+         0 24  7
+         1  3 51
+          true
+prediction  0  1
+         0 31  9
+         1  3 43
+[1] 0.9587636
+[1] "The interaction depth is: 2"
+[1] "The number of trees is: 900"
+          true
+prediction  0  1
+         0 21  5
+         1  2 58
+          true
+prediction  0  1
+         0 34  6
+         1  5 41
+          true
+prediction  0  1
+         0 26 11
+         1  3 45
+          true
+prediction  0  1
+         0 16 10
+         1  2 58
+          true
+prediction  0  1
+         0 31  7
+         1  1 46
+          true
+prediction  0  1
+         0 23  5
+         1  4 53
+          true
+prediction  0  1
+         0 30  9
+         1  4 43
+[1] 0.940797
+[1] "The interaction depth is: 4"
+[1] "The number of trees is: 900"
+          true
+prediction  0  1
+         0 21  6
+         1  2 57
+          true
+prediction  0  1
+         0 35  6
+         1  4 41
+          true
+prediction  0  1
+         0 26 11
+         1  3 45
+          true
+prediction  0  1
+         0 16  9
+         1  2 59
+          true
+prediction  0  1
+         0 31  7
+         1  1 46
+          true
+prediction  0  1
+         0 22  7
+         1  5 51
+          true
+prediction  0  1
+         0 30  9
+         1  4 43
+[1] 0.9408939
+[1] "The interaction depth is: 6"
+[1] "The number of trees is: 900"
+          true
+prediction  0  1
+         0 21  6
+         1  2 57
+          true
+prediction  0  1
+         0 35  6
+         1  4 41
+          true
+prediction  0  1
+         0 27  9
+         1  2 47
+          true
+prediction  0  1
+         0 15 10
+         1  3 58
+          true
+prediction  0  1
+         0 31  8
+         1  1 45
+          true
+prediction  0  1
+         0 22  6
+         1  5 52
+          true
+prediction  0  1
+         0 30  9
+         1  4 43
+[1] 0.9418073

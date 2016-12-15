@@ -31,9 +31,32 @@ Exploration
 *	Plot boxplots of each attribute
 
 Model Building:
+* 66/33 training test split (559 and 310 respectively)
+* 7 folds Cross-Validation on training set
+* 
+* Decision Tree:
+*	Results:
+*		TPR: 0.871262
+* Random Forest:
+* 	nTrees: 100
+*       Tries bag sizes (p): {5,10,15,20,27}
+*	Results:	
+*		best p: 15
+*		TPR: 0.953563
+* Boosting:
+*	lambda: 0.01
+*	Bag Fraction: 0.5
+*	Interaction Depths: {1,2,4,6}
+*	noTrees: {300,500,700,900}
+*	Results:
+*		best ID: 1
+*		best noTree: 300
+*		TPR: 1.00
+* Logistic Regression:
+*	Results:
+*		TPR: 0.8961537
 
-
-
+0.9092347 0.9436228 0.9535630 0.9514312 0.9400531
 
 I would then build either all or a few of the following models:
 	- Regression
