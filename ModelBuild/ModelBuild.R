@@ -237,8 +237,61 @@ LogReg <- function(folds, train.set, formula) {
   return (mean(acc))
 }
 
+### Evaluate
+# Evaluate predictions from model using a provided threshold. 
+# Returns the amount of times the predictions were correct as well as 
+#   what was predicted each time
+Evaluate <- function(thresh,predictions,test.Result){
+  
+  # Make predictions based on threshold
+  tp = 0
+  tn = 0
+  no = 0
+  yes = 0
+  for (i in 1:length(predictions)){
+    if (predictions[i] > thresh){
+      predictions[i] = 1
+    }
+    else{
+      predictions[i] = 0
+    }
+    
+    # Increment total true and true positive count
+    if (test.Result[i] == 1){
+      if (predictions[i] == 1){
+        tp = tp + 1
+      }
+      yes = yes + 1
+    }
+    else{
+      if (predictions[i] == 0){
+        tn = tn + 1
+      }
+      no = no + 1
+    }
+  }
+  
+  # Create and display confusion matrix
+  predDF = data.frame(true = test.Result, prediction = as.factor(predictions))
+  print(table(predDF))
+  
+  return (c(tp, yes, tn, no))
+}
+
+
+# Save dataframe to file
+saveDF <- function(df, name){
+  # Save matchup table
+  saveRDS(df,paste(name," Data.rda",sep=""))
+  write.csv(df,paste(name,".csv",sep=""))
+}
+
+
 
 #####           MAIN           #####
+needSplit = TRUE                   # Set to TRUE if dataset needs split
+evalModels = TRUE                  # Set to TRUE from model evaluation. Will slow performance
+CreateModel = TRUE                  # Set to TRUE if model needs created
 
 # Load final filtered dataset
 set.seed(1)
@@ -246,7 +299,6 @@ matchups <<- read.csv("./Data/FilteredMatchups2.csv")
 matchups$X = NULL
 
 # Split set into train and test
-needSplit = TRUE
 if(needSplit){
   n = nrow(matchups)
   train.set = data.frame(matrix(nrow=0,ncol=65))
@@ -263,12 +315,10 @@ if(needSplit){
   }
 }
 
-### Begin Model Creation
+### Begin Model Evaluation
 
 #Create the 7 folds
 folds = createFolds(1:nrow(train.set),k=7)
-
-evalModels = FALSE
 if (evalModels){
   ## Decision Tree
   treeTPR=DecisionTree(folds, train.set)
@@ -284,3 +334,116 @@ if (evalModels){
   formula = as.formula(Result~.)
   lrTPR = LogReg(folds, train.set, formula)
 }
+
+
+### Begin Model Creation and Testing
+# Best model: Boosted Tree
+#   Interaction Depth = 1
+#   Bag Fraction = 0.5
+#   number of trees = 300
+#   lambda (shrinkage) = 0.01
+#   TPR = 1.00
+#   Bernoulli loss for classification
+
+# Second Best Model: Random Forest
+#   number of trees = 100
+#   Bag Size (p) = 15
+
+if (isTRUE(CreateModel)){
+  # Fit this model on the training set
+  final.Model.Boost = gbm(Result~., data=train.set, distribution="bernoulli", n.trees=300,
+                    shrinkage=0.01, interaction.depth=1, bag.fraction=0.5)
+  final.Model.RF = randomForest(Result~.,data=train.set, mtry = 15, n.tree=100)
+  
+  tpBoost = c(0,0,0,0,0,0)         #50, 60, 70, 80, 90, 95
+  tpRF = c(0,0,0,0,0,0)            #50, 60, 70, 80, 90, 95
+  yesBoost = c(0,0,0,0,0,0)        #50, 60, 70, 80, 90, 95
+  yesRF = c(0,0,0,0,0,0)           #50, 60, 70, 80, 90, 95
+  tnBoost = c(0,0,0,0,0,0)         #50, 60, 70, 80, 90, 95
+  tnRF = c(0,0,0,0,0,0)            #50, 60, 70, 80, 90, 95
+  noBoost = c(0,0,0,0,0,0)         #50, 60, 70, 80, 90, 95
+  noRF = c(0,0,0,0,0,0)            #50, 60, 70, 80, 90, 95
+  
+  # Predict test set records based on model created from training set
+  rownames(test.set) = 1:nrow(test.set)
+  
+  # Make predictions using models
+  predictionsBoost = predict.gbm(final.Model.Boost, newdata=test.set[,(1:length(test.set)-1)], n.trees=300)
+  avgBoost = mean(predictionsBoost,1)
+  predictionsRF = predict(final.Model.RF, newdata=test.set[,(1:length(test.set)-1)])
+  
+  
+  ## Evaluate model using different thresholds
+  threshold = c(0.50, 0.60, 0.70, 0.80, 0.90, 0.95)
+  for (i in 1:length(threshold)){
+    print(paste("Boost with threshold: ", threshold[i],sep=""))
+    evalBoost = Evaluate(avgBoost*threshold[i],predictionsBoost,test.set$Result)
+    print(paste("RF with threshold: ", threshold[i],sep=""))
+    evalRF = Evaluate(threshold[i],predictionsRF,test.set$Result)
+    
+    # True positive count
+    tpBoost[i] = tpBoost[i]+evalBoost[1]
+    tpRF[i] = tpRF[i]+evalRF[1]
+    
+    # Actual yes count
+    yesBoost[i] = yesBoost[i]+evalBoost[2]
+    yesRF[i] = yesRF[i]+evalRF[2]
+    
+    # True negative count
+    tnBoost[i] = tnBoost[i] + evalBoost[3]
+    tnRF[i] = tnRF[i] + evalRF[3]
+    
+    # Actual no count
+    noBoost[i] = noBoost[i] + evalBoost[4]
+    noRF[i] = noRF[i] + evalRF[4]
+  }
+  
+  # Analyzing the results
+  threshold = c(50,60,70,80,90,95)
+  tprBoost = c(0,0,0,0,0,0)
+  tprRF = c(0,0,0,0,0,0)
+  specificityBoost = c(0,0,0,0,0,0)
+  specificityRF = c(0,0,0,0,0,0)
+  for (i in 1:length(threshold)){
+    tprBoost[i] = tpBoost[i]/yesBoost[i]
+    tprRF[i] = tpRF[i]/yesRF[i]
+    specificityBoost[i] = tnBoost[i]/noBoost[i]
+    specificityRF[i] = tnRF[i]/noRF[i]
+  }
+  
+  # Create data frame of results and plot
+  ResultFrameBoost = data.frame(Threshold = threshold, Specificity=specificityBoost, TPR=tprBoost)
+  ResultFrameRF = data.frame(Threshold = threshold, Specificity=specificityRF, TPR=tprRF)
+  SaveDF(ResultFrameBoost, "./Results/Boost")
+  SaveDF(ResultFrameRF, "./Results/RF")
+  
+  p1 <- ggplot(data=ResultFrameBoost,
+         aes(x=Specificity,y=TPR,group=1))+
+    geom_line()+geom_point()+
+    xlab("Specificity")+
+    ylab("True Positive Rate")+
+    ggtitle("ROC Curve for GPM")
+  
+  p2 <- ggplot(data=ResultFrameRF,
+               aes(y=Specificity,x=TPR,group=1))+
+    geom_line()+geom_point()+
+    xlab("Specificity")+
+    ylab("True Positive Rate")+
+    ggtitle("ROC Curve for GPM")
+  
+  p3 <- ggplot(data=ResultFrameRF,
+               aes(x=Threshold,y=TPR,group=1,color=TPR))+
+    geom_line()+geom_point()+ 
+    xlab("Threshold")+ylab("True Positive Rate")+
+    ggtitle("TPR vs Prediction Confidence (RF)")
+  
+  p3 <- ggplot(data=ResultFrameBoost,
+               aes(x=Threshold,y=TPR,group=1,color=TPR))+
+    geom_line()+geom_point()+ 
+    xlab("Threshold")+ylab("True Positive Rate")+
+    ggtitle("TPR vs Prediction Confidence (GBM)")
+  
+  print(p3)
+  print(p4)
+}
+

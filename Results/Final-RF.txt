@@ -1,0 +1,35 @@
+[1] "RF with threshold: 0.5"
+    prediction
+true   0   1
+   0  55  57
+   1  14 184
+
+[1] "RF with threshold: 0.6"
+    prediction
+true   0   1
+   0 109   3
+   1  29 169
+
+[1] "RF with threshold: 0.7"
+    prediction
+true   0   1
+   0 112   0
+   1  35 163
+
+[1] "RF with threshold: 0.8"
+    prediction
+true   0   1
+   0 112   0
+   1  35 163
+
+[1] "RF with threshold: 0.9"
+    prediction
+true   0   1
+   0 112   0
+   1  37 161
+
+[1] "RF with threshold: 0.95"
+    prediction
+true   0   1
+   0 112   0
+   1 144  54
