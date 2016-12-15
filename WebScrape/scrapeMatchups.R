@@ -85,6 +85,7 @@ UpdateSchedule <- function(teamAbbr, year){
   df$AvgGoalieCount = NA
   df$AvgShiftCount = NA
   df$ATOI = NA
+  df$GID = NA
   df$AvgAge = NA
   df$PDO = NA
   df$FOWPer = NA
@@ -230,8 +231,11 @@ getGoalieStats <- function(html, team){
   svPer = 0
   count = 0
   for (goalie in goalies){
-    svPer = svPer + as.numeric(html_nodes(goalie, xpath="./td[6]") %>% html_text())
-    count = count + 1
+    curr = as.numeric(html_nodes(goalie, xpath="./td[6]") %>% html_text())
+    if (!is.na(curr)){
+      svPer = svPer + curr
+      count = count + 1
+    }
   }
   svPer = round(svPer / count, digits=3)
   
@@ -313,7 +317,12 @@ Write2Files <- function(team, df){
   write.csv(df,file=paste("./TeamSchedules/CSV/",team,".csv",sep=""))
 }
 
+#team = "VAN"
+#data = UpdateTeam(team)
+#Write2Files(team,data)
+#importTeam(team)
+#DeleteColumn()
 
 importTeams()
-#data = UpdateTeams()
+data = UpdateTeams()
 DeleteColumn()
