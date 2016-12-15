@@ -7,8 +7,8 @@ scrapeTeam <- function(teamAbbr){
     
   tryCatch({
     teamInfo = getTeamInfo(teamAbbr)
-    saveRDS(teamInfo,file=paste("./TeamSchedules/RDA/",teamAbbr," Data.rda",sep=""))
-    write.csv(teamInfo,file=paste("./TeamSchedules/CSV/",teamAbbr,".csv",sep=""))
+    saveRDS(teamInfo,file=paste("./WebScrape/TeamSchedules/RDA/",teamAbbr," Data.rda",sep=""))
+    write.csv(teamInfo,file=paste("./WebScrape/TeamSchedules/CSV/",teamAbbr,".csv",sep=""))
   }, error = function(e){
     cat("ERROR:",conditionMessage(e),"\n")
   })
@@ -67,4 +67,5 @@ getTeamInfo <- function(team) {
   return (result)
 }
 
-data = scrapeTeam("MTL")
+#data = scrapeTeam("MTL")
+print(config$teamAbbr)

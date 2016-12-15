@@ -13,10 +13,7 @@ default:
     Month: "10"		  # MM
     Day: "02"			  # DD
     Year: "2016"		# YYYY
-  
-  
-  header: ["Date","Batter Name","Pitcher Name","Batter v Pitcher hand","Batter location","Pitcher v Batter hand","Pitcher location","At bats","Hit"]
-  
+    
   url:
     Base:"http://www.hockey-reference.com"
     

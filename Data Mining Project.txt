@@ -1,9 +1,31 @@
 Webscraping:
-* Losing team schedule script
-*	NYR NULL values in GID threw errors
+*  Team schedule scraping script got deleted :(
+*  Features attained:
+	  From Schedule: {GP, Date, Loc, Opp, GF, GA, Outcome, Wins, Losses, 
+				OL, Streak, ROW, ShotsFor, ShotsAgainst, PIM, 
+				PPG, PPO, SHG, PKM, PKG, PKO, L10Wins, L10Losses, 
+				L10OL, TotWinPer, HomeWinPer, AwayWinPer}
+
+	  From Matchups: {Corsi-for % (close), Corsi-for % (5v5), Corsi-for % (Even), 
+				Save %, Avg Goalie count, Avg shift count, ATOI, GID} 
+
+	  From Homepage: {Average Age, PDO, Face-off win %}
+		* FOW% Is not included in merge
 
 
-Then I would perform an exploratory analysis of the attributes
+
+Preprocessing (Initially 1230 records, with 69 variables):
+* Remove date and team names
+* Remove any record where either team has played less than 10 games (-141 records)
+
+
+
+Exploration 
+* Calculate differences between each attribute
+* 	Find summary statistics of each attribute
+* 	Plot distribution of each attribute
+
+
 
 I would then build either all or a few of the following models:
 	- Regression
@@ -11,20 +33,4 @@ I would then build either all or a few of the following models:
 	- SVM
 	- Random Forest
 	- K-NN		
-
-
-
-So this would be fairly similar to the extra credit assignment (with the exception of creating my own data set) if this is allowed	
-
-
-Features (
-  From Schedule: {GP, Date, Loc, Opp, GF, GA, Outcome, Wins, Losses, OL, Streak, ROW, ShotsFor,
-			ShotsAgainst, PIM, PPG, PPO, SHG, PKM, PKG, PKO,   
-			L10Wins, L10Losses, L10OL, TotWinPer, HomeWinPer, AwayWinPer}
-
-  From Matchups: {Corsi-for % (close), Corsi-for % (5v5), Corsi-for % (Even), 
-			Save %, Avg Goalie count, Avg shift count, ATOI, GID} 
-
-  From Homepage: {Average Age, PDO, Face-off win %}
-
 

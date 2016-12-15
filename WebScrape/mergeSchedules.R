@@ -3,10 +3,10 @@ config <- config::get()
 # Import all teams from csv file
 importTeams <- function(){
   tryCatch({
-    temp = list.files(path="./TeamSchedules/CSV/.",pattern="*.csv")
+    temp = list.files(path="./WebScrape/TeamSchedules/CSV/.",pattern="*.csv")
     for (i in 1:length(temp)) {
       assign(substr(temp[i],1,nchar(temp[i])-4), 
-             read.csv(paste("./TeamSchedules/CSV/",temp[i],sep="")),
+             read.csv(paste("./WebScrape/TeamSchedules/CSV/",temp[i],sep="")),
              envir=.GlobalEnv)
     }
   }, error = function(e){
@@ -18,7 +18,7 @@ importTeams <- function(){
 importTeam <- function(teamAbbr){
   tryCatch({
     assign(teamAbbr,
-           read.csv(paste("./TeamSchedules/CSV/",teamAbbr,".csv",sep="")),
+           read.csv(paste("./WebScrape/TeamSchedules/CSV/",teamAbbr,".csv",sep="")),
            envir=.GlobalEnv)
   }, error = function(e){
     cat("ERROR:",conditionMessage(e),"\n")
@@ -43,7 +43,7 @@ mergeSchedules <- function(){
         gid =  as.character(df[i,'GID'])       # Get game ID.  Will be unique
         
         # If matchup hasn't been merged already, merge it
-        if (is.null(gid)) {
+        if (is.na(gid)) {
           print(team)
           next
         }
@@ -123,13 +123,13 @@ mergeMatchup <- function(homeTeam, awayTeam){
 
 # Get desired features for given team
 getTeamFeatures <- function(team){
-  features = data.frame(matrix(ncol=32,nrow=0))
-  colnames(features) = c("GF","GA","Wins","Losses","OL","Streak","ROW","L10Wins","L10Losses","L10OL","PPM","PPG","PPO",
+  features = data.frame(matrix(ncol=33,nrow=0))
+  colnames(features) = c("GP","GF","GA","Wins","Losses","OL","Streak","ROW","L10Wins","L10Losses","L10OL","PPM","PPG","PPO",
                          "SHG","PKM","PKG","PKO","ShotsFor","ShotsAgainst","SV","AvCFClose","AvCF5v5","AvCFEven",
                          "AvGoalieCnt","AvShiftCnt","ATOI","AvAge","PDO","FOW","WinP","HomeP","AwayP")
   
   
-  
+  GP = team$GamesPlayed               # Games Played
   GF = team$GoalsFor                  # Goals For
   GA = team$GoalsAgainst              # Goals Against
   Wins = team$Wins                    # Wins
@@ -177,8 +177,8 @@ getTeamFeatures <- function(team){
   AwayP = team$AwayPer                # Away win percentage
   
   
-  # Create 32 feature record
-  features = cbind(GF,GA,Wins,Losses,OL,Streak,ROW,L10Wins,L10Losses,L10OL,PPM,PPG,PPO,
+  # Create 33 feature record
+  features = cbind(GP,GF,GA,Wins,Losses,OL,Streak,ROW,L10Wins,L10Losses,L10OL,PPM,PPG,PPO,
                         SHG,PKM,PKG,PKO,ShotsFor,ShotsAgainst,SV,AvCFClose,AvCF5v5,AvCFEven,
                         AvGoalieCnt,AvShiftCnt,ATOI,AvAge,PDO,FOW,WinP,HomeP,AwayP)
   return (features)
@@ -196,6 +196,13 @@ DeleteColumn <- function(){
   }
 }
 
+# Writes team df to both CSV and RDA files
+Write2Files <- function(team, df){
+  saveRDS(df,file=paste("./WebScrape/TeamSchedules/RDA/",team," Data.rda",sep=""))
+  write.csv(df,file=paste("./WebScrape/TeamSchedules/CSV/",team,".csv",sep=""))
+}
+
+
 # Import teams 
 importTeams()
 DeleteColumn()
@@ -203,7 +210,8 @@ DeleteColumn()
 # Create matchup table
 matchups = mergeSchedules()
 matchups = matchups[order(as.Date(matchups$Date, format="%Y-%m-%d")),]
+row.names(matchups) <- 1:nrow(matchups)
 
 # Save matchup table
-saveRDS(matchups,"Matchups Data.rda")
-write.csv(matchups,"Matchups.csv")
+saveRDS(matchups,"./Data/Matchups Data.rda")
+write.csv(matchups,"./Data/Matchups.csv")

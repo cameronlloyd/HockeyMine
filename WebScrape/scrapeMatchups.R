@@ -6,10 +6,10 @@ config <- config::get()
 # Import all teams from csv file
 importTeams <- function(){
   tryCatch({
-    temp = list.files(path="./TeamSchedules/CSV/.",pattern="*.csv")
+    temp = list.files(path="./WebScrape/TeamSchedules/CSV/.",pattern="*.csv")
     for (i in 1:length(temp)) {
       assign(substr(temp[i],1,nchar(temp[i])-4), 
-             read.csv(paste("./TeamSchedules/CSV/",temp[i],sep="")),
+             read.csv(paste("./WebScrape/TeamSchedules/CSV/",temp[i],sep="")),
              envir=.GlobalEnv)
     }
   }, error = function(e){
@@ -22,7 +22,7 @@ importTeams <- function(){
 importTeam <- function(teamAbbr){
   tryCatch({
     assign(teamAbbr,
-           read.csv(paste("./TeamSchedules/CSV/",teamAbbr,".csv",sep="")),
+           read.csv(paste("./WebScrape/TeamSchedules/CSV/",teamAbbr,".csv",sep="")),
            envir=.GlobalEnv)
   }, error = function(e){
     cat("ERROR:",conditionMessage(e),"\n")
@@ -44,8 +44,8 @@ UpdateTeams <- function(){
       print(paste("Updating: ",abbr,sep=""))
       teamInfo = UpdateSchedule(abbr, "2016")
       print("   Saving.")
-      saveRDS(teamInfo,file=paste("./TeamSchedules/RDA/",abbr," Data.rda",sep=""))
-      write.csv(teamInfo,file=paste("./TeamSchedules/CSV/",abbr,".csv",sep=""))
+      saveRDS(teamInfo,file=paste("./WebScrape/TeamSchedules/RDA/",abbr," Data.rda",sep=""))
+      write.csv(teamInfo,file=paste("./WebScrape/TeamSchedules/CSV/",abbr,".csv",sep=""))
     } 
   }, error = function(e){
     cat("ERROR:",conditionMessage(e),"\n")
@@ -62,8 +62,8 @@ UpdateTeam <- function(abbr){
     print(paste("Updating: ",abbr,sep=""))
     teamInfo = UpdateSchedule(abbr, "2016")
     print("   Saving.")
-    saveRDS(teamInfo,file=paste("./TeamSchedules/RDA/",abbr," Data.rda",sep=""))
-    write.csv(teamInfo,file=paste("./TeamSchedules/CSV/",abbr,".csv",sep=""))
+    saveRDS(teamInfo,file=paste("./WebScrape/TeamSchedules/RDA/",abbr," Data.rda",sep=""))
+    write.csv(teamInfo,file=paste("./WebScrape/TeamSchedules/CSV/",abbr,".csv",sep=""))
   }, error = function(e){
     cat("ERROR:",conditionMessage(e),"\n")
   })
@@ -313,8 +313,8 @@ convertATOI <- function(m,s,count){
 
 # Writes team df to both CSV and RDA files
 Write2Files <- function(team, df){
-  saveRDS(df,file=paste("./TeamSchedules/RDA/",team," Data.rda",sep=""))
-  write.csv(df,file=paste("./TeamSchedules/CSV/",team,".csv",sep=""))
+  saveRDS(df,file=paste("./WebScrape/TeamSchedules/RDA/",team," Data.rda",sep=""))
+  write.csv(df,file=paste("./WebScrape/TeamSchedules/CSV/",team,".csv",sep=""))
 }
 
 #team = "VAN"
