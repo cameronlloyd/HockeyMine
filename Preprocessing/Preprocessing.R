@@ -51,16 +51,52 @@ filterDataset <- function(df){
 }
 
 
+part1 = TRUE
 
-
-
-# Import matchups dataset
-matchups <<- read.csv("./Data/Matchups.csv")
-#importTeams()
-
-
-# Pre-Filter dataset
-filteredMatchups <<- filterDataset(matchups)
-saveDF(filteredMatchups, "./Data/FilteredMatchups")
-
+if (isTRUE(part1)){
+  ### Preprocessing Part 1
+  
+  # Import matchups dataset
+  matchups <<- read.csv("./Data/Matchups.csv")
+  importTeams()
+  
+  # Pre-Filter dataset
+  filteredMatchups <<- filterDataset(matchups)
+  saveDF(filteredMatchups, "./Data/FilteredMatchups")
+} else {
+  ### Preprocessing Part 2
+  
+  # Import differ and summary 
+  filtDF <- read.csv("./Data/FilteredMatchups.csv")
+  diffDF <- read.csv("./Preprocessing/Data/DifferencesMatchup.csv")
+  filtDF$X = NULL
+  diffDF$X = NULL
+  diffSummaries <- read.csv("./Preprocessing/Data/DiffSummaries.csv")
+  
+  # Remove Outliers
+  cols = c('ROW','L10Losses','SHG','PKG','ShotsAgainst','ShotsFor','SV',
+           'AvGoalieCnt','HomeP')
+  for (col in cols){
+    row = diffSummaries[diffSummaries$X == col,]
+    IQR = as.numeric(row['IQR'])
+    Q1 = as.numeric(row['firstQ'])
+    Q3 = as.numeric(row['thirdQ'])
+    
+    # Find high and low ouliers 
+    high = Q3 + (IQR*1.5);
+    low = Q1 - (IQR*1.5);
+    
+    # Remove values in column outside range of outliers
+    remove = c()
+    for (i in 1:nrow(diffDF)){
+      if ((diffDF[i,col] > high) || (diffDF[i,col] < low)){
+        remove = c(remove, i)
+      }
+    }
+    filtDF = filtDF[-remove,]
+  }
+  
+  # Save filtered matchup dataframe
+  saveDF(filtDF, "./Data/FilteredMatchups2")
+}
 

@@ -15,15 +15,23 @@ Webscraping:
 
 
 Preprocessing (Initially 1230 records, with 69 variables):
-* Remove date and team names
-* Remove any record where either team has played less than 10 games (-141 records)
-
+* Part 1:
+* 	Remove date and team names
+* 	Remove any record where either team has played less than 10 games (-141 records)
+* Part 2:
+*	Remove Outliers (-180 records)
 
 
 Exploration 
-* Calculate differences between each attribute
+* Part 1:
+* 	Calculate differences between each attribute
 * 	Find summary statistics of each attribute
-* 	Plot distribution of each attribute
+*	Plot boxplots of each attribute
+* Part 2:
+*	Plot boxplots of each attribute
+
+Model Building:
+
 
 
 
