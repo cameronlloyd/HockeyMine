@@ -14,6 +14,7 @@ Uses the following R packages:
 * Set main directory as working directory in R Studio
 * Perform any or all steps mentioned below
 * Test outputs of my scripts are stored in all 'Results' folder.
+* ~/Data/FilteredMatchups2.csv is the dataset used for model creation
 
 ## Web Scraping
 All scripts are contained in ./WebScrape
